@@ -2,7 +2,6 @@ import { Stack } from 'expo-router';
 import React from 'react';
 
 const AuthLayout = () => {
-  console.log('AuthLayout');
   return (
     <Stack
       screenOptions={{

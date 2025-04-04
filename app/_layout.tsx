@@ -1,3 +1,4 @@
+import { ProtectedRoute } from '@/components/auth/protected-route';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { tokenCache } from '@clerk/clerk-expo/token-cache';
@@ -28,6 +29,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="+not-found" />
         </Stack>
+        <ProtectedRoute />
         <StatusBar style="auto" />
       </ConvexProvider>
     </ClerkProvider>

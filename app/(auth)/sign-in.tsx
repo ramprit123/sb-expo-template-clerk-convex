@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { Text, View } from 'react-native';
 import React from 'react';
 
 const SignIn = () => {
@@ -8,9 +8,9 @@ const SignIn = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'red',
+        padding: 20,
       }}>
-      <Text>Sign In</Text>
+      <Text>Welcome to Sign in</Text>
     </View>
   );
 };

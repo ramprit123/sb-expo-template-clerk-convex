@@ -53,14 +53,11 @@ const featuredProperties = [
 ];
 
 export default function HomeScreen() {
-  const { isLoaded, isSignedIn } = useAuth();
   const [fontsLoaded] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-SemiBold': Inter_600SemiBold,
     'Inter-Bold': Inter_700Bold,
   });
-  console.log('isLoaded', isLoaded);
-  console.log('isSignedIn', isSignedIn);
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
