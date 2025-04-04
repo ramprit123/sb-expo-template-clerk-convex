@@ -9,9 +9,9 @@
     "lint": "expo lint"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "^1.0.0",
-    "@expo/vector-icons": "^14.0.2",
+    "@clerk/clerk-expo": "^2.9.7",
     "@expo-google-fonts/inter": "^0.2.3",
+    "@expo/vector-icons": "^14.0.2",
     "@lucide/lab": "^0.1.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",

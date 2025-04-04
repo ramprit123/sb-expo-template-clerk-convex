@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import Constants from 'expo-constants';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 // Get the Convex URL from environment variables
 const convexUrl = process.env.EXPO_PUBLIC_CONVEX_URL;
