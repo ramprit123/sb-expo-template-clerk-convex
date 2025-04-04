@@ -1,16 +1,29 @@
+import { useAuth } from '@clerk/clerk-expo';
+import {
+  Inter_400Regular,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from '@expo-google-fonts/inter';
+import { Redirect, SplashScreen } from 'expo-router';
+import { MapPin, Search } from 'lucide-react-native';
 import { useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
-import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import { SplashScreen } from 'expo-router';
-import Animated, { 
+import {
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Animated, {
+  Extrapolate,
+  interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
-  interpolate,
-  Extrapolate
 } from 'react-native-reanimated';
-import { Search, MapPin } from 'lucide-react-native';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -28,46 +41,38 @@ const featuredProperties = [
     title: 'Modern Family Home',
     location: 'Downtown LA, California',
     price: '$2,850,000',
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
   },
   {
     id: 2,
     title: 'Luxury Villa',
     location: 'Beverly Hills, California',
     price: '$5,250,000',
-    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
   },
 ];
 
 export default function HomeScreen() {
+  const { isLoaded, isSignedIn } = useAuth();
   const [fontsLoaded] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-SemiBold': Inter_600SemiBold,
     'Inter-Bold': Inter_700Bold,
   });
-
+  console.log('isLoaded', isLoaded);
+  console.log('isSignedIn', isSignedIn);
   const scrollY = useSharedValue(0);
 
   const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
+    onScroll: event => {
       scrollY.value = event.contentOffset.y;
     },
   });
 
   const headerStyle = useAnimatedStyle(() => {
     return {
-      height: interpolate(
-        scrollY.value,
-        [0, 100],
-        [200, 120],
-        Extrapolate.CLAMP
-      ),
-      opacity: interpolate(
-        scrollY.value,
-        [0, 100],
-        [1, 0.9],
-        Extrapolate.CLAMP
-      ),
+      height: interpolate(scrollY.value, [0, 100], [200, 120], Extrapolate.CLAMP),
+      opacity: interpolate(scrollY.value, [0, 100], [1, 0.9], Extrapolate.CLAMP),
     };
   });
 
@@ -98,7 +103,7 @@ export default function HomeScreen() {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <View style={styles.categories}>
-          {categories.map((category) => (
+          {categories.map(category => (
             <TouchableOpacity key={category.id} style={styles.categoryButton}>
               <Text style={styles.categoryIcon}>{category.icon}</Text>
               <Text style={styles.categoryText}>{category.name}</Text>
@@ -107,11 +112,8 @@ export default function HomeScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Featured Properties</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.featuredScroll}>
-          {featuredProperties.map((property) => (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.featuredScroll}>
+          {featuredProperties.map(property => (
             <TouchableOpacity key={property.id} style={styles.propertyCard}>
               <Image source={{ uri: property.image }} style={styles.propertyImage} />
               <View style={styles.propertyInfo}>

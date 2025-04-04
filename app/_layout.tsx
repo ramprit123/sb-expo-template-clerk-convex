@@ -1,9 +1,11 @@
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ClerkProvider } from '@clerk/clerk-expo';
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { tokenCache } from '@clerk/clerk-expo/token-cache';
+import { ConvexProvider, ConvexReactClient } from 'convex/react';
 import Constants from 'expo-constants';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 
 // Get the Convex URL from environment variables
 const convexUrl = process.env.EXPO_PUBLIC_CONVEX_URL;
@@ -18,8 +20,8 @@ export default function RootLayout() {
 
   return (
     <ClerkProvider
-      publishableKey={Constants.expoConfig?.extra?.CLERK_PUBLISHABLE_KEY as string}
-    >
+      tokenCache={tokenCache}
+      publishableKey={Constants.expoConfig?.extra?.CLERK_PUBLISHABLE_KEY as string}>
       <ConvexProvider client={convex}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
