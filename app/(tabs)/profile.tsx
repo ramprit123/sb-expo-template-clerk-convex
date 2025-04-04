@@ -4,6 +4,9 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@e
 import { SplashScreen } from 'expo-router';
 import { Settings, Bell, Heart, Chrome as Home, LogOut, ChevronRight, Camera, Upload } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { useUser } from "@clerk/clerk-expo";
+import { useMutation, useQuery } from "convex/react";
+import { api } from '@/convex/_generated/api';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,13 +38,16 @@ const menuItems = [
 ];
 
 export default function ProfileScreen() {
+  const { user } = useUser();
+  const userProfile = useQuery(api.users.get, { userId: user?.id ?? "" });
+  const updateProfile = useMutation(api.users.updateProfile);
+  
   const [fontsLoaded] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-SemiBold': Inter_600SemiBold,
     'Inter-Bold': Inter_700Bold,
   });
 
-  const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80');
   const [uploading, setUploading] = useState(false);
 
   const pickImage = async () => {
@@ -53,13 +59,15 @@ export default function ProfileScreen() {
         quality: 0.8,
       });
 
-      if (!result.canceled) {
+      if (!result.canceled && user) {
         setUploading(true);
-        // Simulate upload delay
-        setTimeout(() => {
-          setProfileImage(result.assets[0].uri);
-          setUploading(false);
-        }, 1000);
+        // In a real app, you would upload to a storage service here
+        // For this example, we'll use the image URI directly
+        await updateProfile({
+          userId: user.id,
+          profileImage: result.assets[0].uri,
+        });
+        setUploading(false);
       }
     } catch (error) {
       console.error('Error picking image:', error);
@@ -73,7 +81,7 @@ export default function ProfileScreen() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !user) {
     return null;
   }
 
@@ -83,7 +91,7 @@ export default function ProfileScreen() {
         <View style={styles.profileSection}>
           <View style={styles.imageContainer}>
             <Image
-              source={{ uri: profileImage }}
+              source={{ uri: userProfile?.profileImage || user.imageUrl }}
               style={styles.profileImage}
             />
             <TouchableOpacity 
@@ -98,8 +106,8 @@ export default function ProfileScreen() {
             </TouchableOpacity>
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.email}>john.doe@example.com</Text>
+            <Text style={styles.name}>{userProfile?.name || user.fullName}</Text>
+            <Text style={styles.email}>{userProfile?.email || user.emailAddresses[0].emailAddress}</Text>
             <TouchableOpacity style={styles.editButton}>
               <Text style={styles.editButtonText}>Edit Profile</Text>
             </TouchableOpacity>
